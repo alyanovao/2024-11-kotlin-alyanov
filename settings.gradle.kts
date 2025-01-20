@@ -7,4 +7,5 @@ pluginManagement {
     }
 }
 
-include("homework1")
+includeBuild("lessons")
+includeBuild("backend")
