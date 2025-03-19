@@ -1,0 +1,445 @@
+openapi: 3.0.4
+info:
+  title: "geolocation ${VERSION_APP}"
+  description: "Сервис в котором сохраняются координаты ваших устройств"
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/geolocation/api
+paths:
+  /v1/location/create:
+    post:
+      tags:
+        - gl
+      summary: добавить расположение
+      operationId: locationCreate
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ICreateLocationRequest"
+        required: true
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ICreateLocationResponse"
+
+  /v1/location/read/current:
+    post:
+      tags:
+        - gl
+      summary: получить текущее расположение
+      operationId: locationCurrentRead
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IReadCurrentLocationRequest"
+        required: true
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IReadCurrentLocationResponse"
+
+  /v1/location/read/all:
+    post:
+      tags:
+        - gl
+      summary: получить существующих событий
+      operationId: locationAllRead
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IReadAllLocationRequest"
+        required: true
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IReadAllLocationResponse"
+
+  /v1/location/update:
+    post:
+      tags:
+        - gl
+      summary: Изменение параметров
+      operationId: locationUpdate
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IUpdateLocationRequest"
+        required: true
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IUpdateLocationResponse"
+
+  /v1/location/delete:
+    post:
+      tags:
+        - gl
+      summary: удалить событие
+      operationId: locationDelete
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IDeleteLocationRequest"
+        required: true
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IDeleteLocationResponse"
+
+  /v1/location/search:
+    post:
+      tags:
+        - gl
+      summary: поиск геопозиции
+      operationId: locationSearch
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ISearchLocationRequest"
+        required: true
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ISearchLocationResponse"
+
+components:
+  schemas:
+    IRequest:
+      type: object
+      description: базовый тип для всех запросов
+      properties:
+        requestType:
+          type: string
+          description: поля дескриминатор для вычисления типа запроса
+          example: create
+
+      discriminator:
+        propertyName: requestType
+        mapping:
+          create: "#/components/schemas/ICreateLocationRequest"
+          read: "#/components/schemas/IReadCurrentLocationRequest"
+          update: "#/components/schemas/IUpdateLocationRequest"
+          delete: "#/components/schemas/IDeleteLocationRequest"
+          search: "#/components/schemas/ISearchLocationRequest"
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        group:
+          type: string
+        field:
+          type: string
+        message:
+          type: string
+
+    ResponseResult:
+      type: string
+      enum:
+        - success
+        - error
+
+    IResponse:
+      type: object
+      description: Базовый интерфейс для всех ответов
+      properties:
+        responseType:
+          type: string
+          description: Поле-дескриминатор для вычисления типа запроса
+          example: create
+        result:
+          $ref: '#/components/schemas/ResponseResult'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+
+      discriminator:
+        propertyName: responseType
+        mapping:
+          create: "#/components/schemas/ICreateLocationResponse"
+          readCurrent: "#/components/schemas/IReadCurrentLocationResponse"
+          readAll: "#/components/schemas/IReadAllLocationResponse"
+          update: "#/components/schemas/IUpdateLocationResponse"
+          delete: "#/components/schemas/IDeleteLocationResponse"
+          search: "#/components/schemas/ISearchLocationResponse"
+
+    ICreateLocationRequest:
+      allOf:
+        - $ref: "#/components/schemas/IRequest"
+        - $ref: "#/components/schemas/RequestModeParam"
+        - type: object
+          properties:
+            gl:
+              $ref: "#/components/schemas/CreateObject"
+
+    IReadCurrentLocationRequest:
+      allOf:
+        - $ref: "#/components/schemas/IRequest"
+        - $ref: "#/components/schemas/RequestModeParam"
+        - type: object
+          properties:
+            device:
+              $ref: "#/components/schemas/ReadObject"
+
+    IReadAllLocationRequest:
+      allOf:
+        - $ref: "#/components/schemas/IRequest"
+        - $ref: "#/components/schemas/RequestModeParam"
+        - type: object
+          properties:
+            device:
+              $ref: "#/components/schemas/ReadAllObject"
+
+    IUpdateLocationRequest:
+      allOf:
+        - $ref: "#/components/schemas/IRequest"
+        - $ref: "#/components/schemas/RequestModeParam"
+        - type: object
+          properties:
+            device:
+              $ref: "#/components/schemas/UpdateObject"
+
+    IDeleteLocationRequest:
+      allOf:
+        - $ref: "#/components/schemas/IRequest"
+        - $ref: "#/components/schemas/RequestModeParam"
+        - type: object
+          properties:
+            device:
+              $ref: "#/components/schemas/DeleteObject"
+
+    ISearchLocationRequest:
+      allOf:
+        - $ref: "#/components/schemas/IRequest"
+        - $ref: "#/components/schemas/RequestModeParam"
+        - type: object
+          properties:
+            device:
+              $ref: "#/components/schemas/UpdateObject"
+
+    CreateObject:
+      allOf:
+        - $ref: "#/components/schemas/BaseGeolocation"
+
+    ReadObject:
+      allOf:
+        - type: object
+          properties:
+            personId:
+              $ref: "#/components/schemas/PersonId"
+            deviceId:
+              $ref: "#/components/schemas/DeviceId"
+    ReadAllObject:
+      allOf:
+        - type: object
+          properties:
+            personId:
+              $ref: "#/components/schemas/PersonId"
+            deviceId:
+              $ref: "#/components/schemas/DeviceId"
+
+    UpdateObject:
+      allOf:
+        - type: object
+          properties:
+            personId:
+              $ref: "#/components/schemas/PersonId"
+            deviceId:
+              $ref: "#/components/schemas/DeviceId"
+              lock:
+                $ref: "#/components/schemas/GlLock"
+    DeleteObject:
+      allOf:
+        - type: object
+          properties:
+            personId:
+              $ref: "#/components/schemas/PersonId"
+            deviceId:
+              $ref: "#/components/schemas/DeviceId"
+            lock:
+              $ref: "#/components/schemas/GlLock"
+
+    ICreateLocationResponse:
+      allOf:
+        - $ref: "#/components/schemas/IResponse"
+        - $ref: "#/components/schemas/ResponseSingle"
+
+    IReadCurrentLocationResponse:
+      allOf:
+        - $ref: "#/components/schemas/IResponse"
+        - $ref: "#/components/schemas/ResponseSingle"
+
+    IReadAllLocationResponse:
+      allOf:
+        - $ref: "#/components/schemas/IResponse"
+        - $ref: "#/components/schemas/ResponseMulti"
+
+    IUpdateLocationResponse:
+      allOf:
+        - $ref: "#/components/schemas/IResponse"
+        - $ref: "#/components/schemas/ResponseSingle"
+
+    IDeleteLocationResponse:
+      allOf:
+        - $ref: "#/components/schemas/IResponse"
+        - $ref: "#/components/schemas/ResponseSingle"
+
+    ISearchLocationResponse:
+      allOf:
+        - $ref: "#/components/schemas/IResponse"
+        - $ref: "#/components/schemas/ResponseMulti"
+
+    PersonId:
+      type: long
+      description: идентификатор владельца устройства
+
+    DeviceId:
+      type: long
+      description: Идентификатор устройства
+
+    GlId:
+      type: string
+      description: идентификатор позиции
+
+    GlLock:
+      type: string
+      description: версия оптимистичной блокировки
+
+    BaseGeolocation:
+      type: object
+      description: объект ответа
+      properties:
+        personId:
+          type: long
+          description: идентификатор владельца устройства
+        deviceId:
+          type: long
+          description: идентификатор устройства
+        longitude:
+          type: double
+          description: долгота
+        latitude:
+          type: double
+          description: широта
+        bearing:
+          type: double
+          description: азимут
+        altitude:
+          type: double
+          description: высота
+        eventDateTime:
+          type: string
+          format: date-time
+          description: дата и время события
+          example: "01.01.2025 09:00:00"
+        batteryLevel:
+          type: float
+          description: уровень заряда
+
+    Permissions:
+      type: string
+      description: ограничения
+      enum:
+        - read
+        - update
+        - delete
+
+
+    ResponseSingle:
+      allOf:
+        - type: object
+          description: Ответ с одним объектом
+          properties:
+            gl:
+              $ref: "#/components/schemas/ResponseObject"
+
+    ResponseMulti:
+      allOf:
+        - type: object
+          description: Ответ с массивом объектов
+          properties:
+            gls:
+              type: array
+              items:
+                $ref: "#/components/schemas/ResponseObject"
+
+    ResponseObject:
+      allOf:
+        - $ref: "#/components/schemas/BaseGeolocation"
+        - type: object
+          description: ответ
+          properties:
+            id:
+              $ref: "#/components/schemas/GlId"
+            ownerId:
+              $ref: "#/components/schemas/GlLock"
+            permissions:
+              type: array
+              uniqueItems: true
+              items:
+                $ref: "#/components/schemas/Permissions"
+
+    # STUBS
+    RequestMode:
+      type: string
+      enum:
+        - prod
+        - test
+        - stub
+
+    RequestModeParam:
+      type: object
+      properties:
+        mode:
+          $ref: "#/components/schemas/WorkMode"
+
+    WorkMode:
+      type: object
+      properties:
+        mode:
+          $ref: "#/components/schemas/RequestMode"
+        stub:
+          $ref: "#/components/schemas/RequestStub"
+
+    RequestStub:
+      type: string
+      description: перечисление стабов
+      enum:
+        - success
+        - notFound
+        - badId
+        - badPersonId
+        - cannotDelete
+        - badSearchString
