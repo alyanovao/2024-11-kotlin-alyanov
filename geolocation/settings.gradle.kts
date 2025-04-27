@@ -1,4 +1,4 @@
-rootProject.name = "geolocation"
+rootProject.name = "ru.aao.geolocation"
 
 dependencyResolutionManagement {
     versionCatalogs {
@@ -23,3 +23,8 @@ pluginManagement {
 include(":geolocation-api")
 include(":geolocation-api-mappers")
 include(":geolocation-common")
+include("geolocation-libs")
+include(":geolocation-app-common")
+include(":geolocation-app-ktor")
+include(":geolocation-biz")
+include(":geolocation-stub")

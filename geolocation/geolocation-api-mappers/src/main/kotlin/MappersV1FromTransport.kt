@@ -42,7 +42,7 @@ fun GeolocationContext.fromTransport(request: IUpdateLocationRequest) {
 }
 
 fun GeolocationContext.fromTransport(request: IDeleteLocationRequest) {
-    command = GlCommand.NONE
+    command = GlCommand.DELETE
     location = request.device.toInternal()
     workMode = request.mode.transportToWorkMode()
     stubCase = request.mode.transportToStubCase()

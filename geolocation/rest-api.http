@@ -1,0 +1,62 @@
+POST http://localhost:8080/api/create
+Content-Type: application/json
+
+{
+  "requestType": "create",
+  "mode": {
+    "mode": "prod",
+    "stub": "success"
+  }
+}
+
+<> 2025-04-27T220359.200.json
+###
+
+POST http://localhost:8080/api/read/current
+Content-Type: application/json
+
+{
+    "requestType": "read",
+    "mode": {
+        "mode": "prod",
+        "stub": "success"
+    }
+}
+
+<> 2025-04-27T220439.200.json
+###
+
+POST http://localhost:8080/api/read/all
+Content-Type: application/json
+
+{
+  "requestType": "readAll",
+  "mode": {
+    "mode": "prod",
+    "stub": "success"
+  }
+}
+###
+
+POST http://localhost:8080/api/update
+Content-Type: application/json
+
+{
+  "requestType": "update",
+  "mode": {
+    "mode": "prod",
+    "stub": "success"
+  }
+}
+###
+
+POST http://localhost:8080/api/delete
+Content-Type: application/json
+
+{
+  "requestType": "delete",
+  "mode": {
+    "mode": "prod",
+    "stub": "success"
+  }
+}

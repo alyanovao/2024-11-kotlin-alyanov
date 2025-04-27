@@ -16,5 +16,5 @@ data class GeolocationContext (
     var filterRequest: GlFilterRequest = GlFilterRequest(),
 
     var glResponse: BaseGeolocation = BaseGeolocation(),
-    val glResponseList: MutableList<BaseGeolocation> = mutableListOf()
+    var glResponseList: MutableList<BaseGeolocation> = mutableListOf()
 )
