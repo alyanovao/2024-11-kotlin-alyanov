@@ -1,6 +1,5 @@
-package ru.aao.geolocation.app.ktor
+package ru.aao.geolocation.common.ktor
 
-import GlSettings
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.SerializationFeature
 import io.ktor.client.call.*

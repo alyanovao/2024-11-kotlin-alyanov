@@ -1,7 +1,7 @@
-package ru.aao.geolocation.app.ktor
+package ru.aao.geolocation.common.ktor
 
 import CommonModel
-import GeolocationContext
+import ru.aao.geolocation.common.GeolocationContext
 
 fun GeolocationContext.toLog(logId: String) = CommonModel(
     id = logId,

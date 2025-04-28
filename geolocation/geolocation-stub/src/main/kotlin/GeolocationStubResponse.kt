@@ -1,4 +1,5 @@
 import models.*
+import ru.aao.geolocation.common.models.*
 
 object GeolocationStubResponse {
     val GEOLOCATION: BaseGeolocation

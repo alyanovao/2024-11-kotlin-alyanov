@@ -1,4 +1,4 @@
-package ru.aao.geolocation.app.ktor
+package ru.aao.geolocation.common.ktor
 
 import io.ktor.server.application.*
 import ru.aao.geolocation.api.v1.models.*

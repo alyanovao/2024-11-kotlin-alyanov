@@ -1,4 +1,4 @@
-package ru.aao.geolocation.app.ktor
+package ru.aao.geolocation.common.ktor
 
 import apiMapper
 import io.ktor.http.*

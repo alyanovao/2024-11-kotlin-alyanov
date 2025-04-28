@@ -8,6 +8,7 @@ validator = "0.13.2"
 kotlin-serialization = "1.8.0"
 ktor = "2.3.12"
 mushko = "9.4.0"
+kafka = "3.7.0"
 
 log-encoder = "7.4"
 logback = "1.5.3"
@@ -38,6 +39,7 @@ ktor-server-yaml = {module = "io.ktor:ktor-server-config-yaml", version.ref = "k
 ktor-server-headers-response = {module = "io.ktor:ktor-server-auto-head-response", version.ref = "ktor"}
 ktor-server-headers-default = {module = "io.ktor:ktor-server-default-headers", version.ref = "ktor"}
 ktor-server-negotiation = {module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor"}
+kafka-client = {module = "org.apache.kafka:kafka-clients", version.ref = "kafka"}
 logback = {module = "ch.qos.logback:logback-classic", version.ref = "logback"}
 logback-appenders = {module = "com.sndyuk:logback-more-appenders", version.ref = "logback"}
 logback-logstash = {module = "net.logstash.logback:logstash-logback-encoder", version.ref = "log-encoder"}

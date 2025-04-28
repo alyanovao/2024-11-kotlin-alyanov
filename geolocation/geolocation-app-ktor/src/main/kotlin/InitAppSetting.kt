@@ -1,9 +1,9 @@
-package ru.aao.geolocation.app.ktor
+package ru.aao.geolocation.common.ktor
 
-import GlProcessor
-import GlSettings
+import ru.aao.geolocation.biz.GlProcessor
 import io.ktor.server.application.*
 import logger.GlLoggerProvider
+import ru.aao.geolocation.common.GlSettings
 
 fun Application.initAppSettings(): GlAppSetting {
     val setting = GlSettings(

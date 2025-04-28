@@ -1,8 +1,8 @@
-package ru.aao.geolocation.app.ktor
+package ru.aao.geolocation.common.ktor
 
-import GlProcessor
-import GlSettings
-import IGlAppSettings
+import ru.aao.geolocation.biz.GlProcessor
+import ru.aao.geolocation.app.common.IGlAppSettings
+import ru.aao.geolocation.common.GlSettings
 import java.util.Collections.emptyList
 
 data class GlAppSetting(

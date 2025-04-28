@@ -1,7 +1,7 @@
-import models.*
-import models.BaseGeolocation
 import ru.aao.geolocation.api.v1.models.*
-import stubs.GlStubs
+import ru.aao.geolocation.common.GeolocationContext
+import ru.aao.geolocation.common.models.*
+import ru.aao.geolocation.common.stubs.GlStubs
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -42,7 +42,7 @@ class MapperTest {
         val context = GeolocationContext(
             requestId = GlRequestId(1),
             command = GlCommand.CREATE,
-            glResponse = BaseGeolocation(
+            glResponse = ru.aao.geolocation.common.models.BaseGeolocation(
                 deviceId = DeviceId(1),
                 personId = PersonId(1),
                 latitude = Latitude(45.05),
@@ -51,12 +51,14 @@ class MapperTest {
                 altitude = Altitude(48.0),
                 batteryLevel = BatteryLevel(76.0F)
             ),
-            errors = mutableListOf(GlError(
+            errors = mutableListOf(
+                GlError(
                 code = "1",
                 group = "Test",
                 field = "comment",
                 message = "Not null message"
-            )),
+            )
+            ),
             state = GlState.RUNNING
         )
         val request = context.toTransport() as ICreateLocationResponse

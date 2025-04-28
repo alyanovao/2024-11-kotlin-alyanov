@@ -1,18 +1,17 @@
-package ru.aao.geolocation.app.ktor
+package ru.aao.geolocation.common.ktor
 
-import GeolocationContext
-import IGlAppSettings
+import ru.aao.geolocation.common.GeolocationContext
+import ru.aao.geolocation.app.common.IGlAppSettings
 import fromTransport
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import kotlinx.datetime.Clock
-import models.GlError
-import models.GlState
+import ru.aao.geolocation.common.models.GlError
+import ru.aao.geolocation.common.models.GlState
 import ru.aao.geolocation.api.v1.models.IRequest
 import ru.aao.geolocation.api.v1.models.IResponse
 import toTransport
-import toTransportCreate
 import kotlin.reflect.KClass
 
 suspend inline fun <reified Q: IRequest, reified S: IResponse> ApplicationCall.process(
