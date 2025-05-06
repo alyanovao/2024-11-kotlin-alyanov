@@ -3,7 +3,20 @@ plugins {
     alias(libs.plugins.kotlinx.serialization)
 }
 
-dependencies {
-    implementation(kotlin("stdlib"))
-    implementation(libs.kotlinx.datetime)
+kotlin {
+    sourceSets {
+        val coroutineVersion: String by project
+        main {
+            dependencies {
+                implementation(kotlin("stdlib-jdk8"))
+                api(libs.kotlinx.datetime)
+                implementation(libs.kotlinx.serialization.core)
+                implementation(libs.kotlinx.serialization.json)
+            }
+        }
+    }
+}
+
+dependencies{
+    implementation(project(":geolocation-libs"))
 }

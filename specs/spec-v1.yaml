@@ -174,10 +174,10 @@ components:
       type: object
       description: Базовый интерфейс для всех ответов
       properties:
-        responseType:
-          type: string
-          description: Поле-дескриминатор для вычисления типа запроса
-          example: create
+#        responseType:
+#          type: string
+#          description: Поле-дескриминатор для вычисления типа запроса
+#          example: create
         result:
           $ref: '#/components/schemas/ResponseResult'
         errors:
@@ -188,12 +188,12 @@ components:
       discriminator:
         propertyName: responseType
         mapping:
-          create: "#/components/schemas/ICreateLocationResponse"
-          readCurrent: "#/components/schemas/IReadCurrentLocationResponse"
-          readAll: "#/components/schemas/IReadAllLocationResponse"
-          update: "#/components/schemas/IUpdateLocationResponse"
-          delete: "#/components/schemas/IDeleteLocationResponse"
-          search: "#/components/schemas/ISearchLocationResponse"
+          create:       "#/components/schemas/ICreateLocationResponse"
+          readCurrent:  "#/components/schemas/IReadCurrentLocationResponse"
+          readAll:      "#/components/schemas/IReadAllLocationResponse"
+          update:       "#/components/schemas/IUpdateLocationResponse"
+          delete:       "#/components/schemas/IDeleteLocationResponse"
+          search:       "#/components/schemas/ISearchLocationResponse"
 
     ICreateLocationRequest:
       allOf:

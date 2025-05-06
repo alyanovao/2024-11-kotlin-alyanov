@@ -148,3 +148,24 @@ User Story 3: Просмотр истории перемещений за пер
 
 Прилагаю диаграмму приложения в виде C4 диаграммы
 [C4 diagram.drawio](C4%20diagram.drawio)
+
+### Команды сборки проекта
+```shell
+docker build -f Dockerfile -t geolocation:0.0.1 .
+```
+
+```shell
+docker tag geolocation:0.0.1 alyanovao/geolocation:0.0.1
+```
+
+```shell
+docker push alyanovao/geolocation:0.0.1
+```
+
+```shell
+docker login
+```
+
+```shell
+docker-compose -p geolocation -f ../docker/docker-compose.yaml up -d
+```
