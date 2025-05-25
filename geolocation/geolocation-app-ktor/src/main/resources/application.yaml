@@ -4,4 +4,4 @@ ktor:
   #urls: http://127.0.0.1:8080
   application:
     modules:
-      - "ru.aao.geolocation.app.ktor.ApplicationKt.module"
+      - "ru.aao.geolocation.common.ktor.ApplicationKt.module"

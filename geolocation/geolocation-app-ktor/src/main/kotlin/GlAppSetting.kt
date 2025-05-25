@@ -1,7 +1,7 @@
 package ru.aao.geolocation.common.ktor
 
 import ru.aao.geolocation.biz.GlProcessor
-import ru.aao.geolocation.app.common.IGlAppSettings
+import ru.aao.geolocation.cor.IGlAppSettings
 import ru.aao.geolocation.common.GlSettings
 import java.util.Collections.emptyList
 

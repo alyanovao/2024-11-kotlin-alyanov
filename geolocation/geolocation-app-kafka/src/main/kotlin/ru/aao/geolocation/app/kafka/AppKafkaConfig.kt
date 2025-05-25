@@ -1,7 +1,7 @@
 package ru.aao.geolocation.app.kafka
 
 import ru.aao.geolocation.biz.GlProcessor
-import ru.aao.geolocation.app.common.IGlAppSettings
+import ru.aao.geolocation.cor.IGlAppSettings
 import ru.aao.geolocation.common.GlSettings
 
 class AppKafkaConfig (

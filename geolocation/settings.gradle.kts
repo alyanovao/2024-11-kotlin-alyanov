@@ -23,9 +23,15 @@ pluginManagement {
 include(":geolocation-api")
 include(":geolocation-api-mappers")
 include(":geolocation-common")
-include("geolocation-libs")
 include(":geolocation-app-common")
 include(":geolocation-app-ktor")
 include(":geolocation-app-kafka")
 include(":geolocation-biz")
 include(":geolocation-stub")
+
+/*
+includeBuild("../geolocation-libs") {
+    dependencySubstitution {
+        substitute(module("ru.aao.geolocation-libs:geolocation-libs")).using(project(":"))
+    }
+}*/

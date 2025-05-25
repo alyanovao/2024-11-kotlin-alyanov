@@ -41,7 +41,7 @@ dependencies {
     implementation(project(":geolocation-common"))
     implementation(project(":geolocation-app-common"))
     implementation(project(":geolocation-biz"))
-    implementation(project(":geolocation-libs"))
+    implementation("ru.aao.geolocation.libs:geolocation-lib-logging")
     implementation("io.ktor:ktor-server-caching-headers:2.3.12")
     implementation("io.ktor:ktor-server-call-logging:2.3.12")
     implementation(kotlin("test"))

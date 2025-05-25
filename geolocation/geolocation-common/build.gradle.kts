@@ -18,5 +18,5 @@ kotlin {
 }
 
 dependencies{
-    implementation(project(":geolocation-libs"))
+    implementation("ru.aao.geolocation.libs:geolocation-lib-logging")
 }

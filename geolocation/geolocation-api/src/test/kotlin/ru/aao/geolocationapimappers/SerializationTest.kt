@@ -8,6 +8,7 @@ import kotlin.test.assertEquals
 
 class SerializationTest {
     private val request = ICreateLocationRequest(
+        requestType = "create",
         mode = WorkMode(
             mode = RequestMode.STUB,
             stub = RequestStub.SUCCESS
@@ -37,7 +38,7 @@ class SerializationTest {
 
     @Test
     fun deserialize() {
-        val json =apiMapper.writeValueAsString(request)
+        val json = apiMapper.writeValueAsString(request)
         val obj = apiMapper.readValue(json, IRequest::class.java) as ICreateLocationRequest
         assertEquals(request, obj)
     }

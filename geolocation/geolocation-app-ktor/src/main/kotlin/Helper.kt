@@ -1,7 +1,7 @@
 package ru.aao.geolocation.common.ktor
 
 import ru.aao.geolocation.common.GeolocationContext
-import ru.aao.geolocation.app.common.IGlAppSettings
+import ru.aao.geolocation.cor.IGlAppSettings
 import fromTransport
 import io.ktor.server.application.*
 import io.ktor.server.request.*
