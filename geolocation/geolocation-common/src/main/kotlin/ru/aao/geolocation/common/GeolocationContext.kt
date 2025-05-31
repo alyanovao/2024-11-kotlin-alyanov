@@ -9,6 +9,7 @@ data class GeolocationContext (
     var state: GlState = GlState.NONE,
     val errors: MutableList<GlError> = mutableListOf(),
 
+    var corSettings: GlSettings = GlSettings(),
     var workMode: GlWorkMode = GlWorkMode.PROD,
     var stubCase: GlStubs = GlStubs.NONE,
 
@@ -16,6 +17,12 @@ data class GeolocationContext (
     var timeStart: Instant = Instant.NONE,
     var location: BaseGeolocation = BaseGeolocation(),
     var filterRequest: GlFilterRequest = GlFilterRequest(),
+
+    var validating: BaseGeolocation = BaseGeolocation(),
+    var glFilterValidating: GlFilterRequest = GlFilterRequest(),
+
+    var validated: BaseGeolocation = BaseGeolocation(),
+    var glFilterValidated: GlFilterRequest = GlFilterRequest(),
 
     var glResponse: BaseGeolocation = BaseGeolocation(),
     var glResponseList: MutableList<BaseGeolocation> = mutableListOf()

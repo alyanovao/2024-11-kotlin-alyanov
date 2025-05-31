@@ -1,6 +1,6 @@
 package ru.aao.geolocation.common
 
-import logger.GlLoggerProvider
+import ru.aao.geolocation.lib.logging.GlLoggerProvider
 
 data class GlSettings(
     val logProvider: GlLoggerProvider = GlLoggerProvider()

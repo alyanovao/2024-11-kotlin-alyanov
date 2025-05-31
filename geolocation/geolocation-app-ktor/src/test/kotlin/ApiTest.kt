@@ -57,7 +57,6 @@ class ApiTest {
         request: IRequest,
         function: suspend (HttpResponse) -> Unit
     ): Unit = testApplication {
-        //application { module(GlAppSetting(corSettings = GlSettings())) }
         val client = createClient {
             install(ContentNegotiation) {
                 jackson {

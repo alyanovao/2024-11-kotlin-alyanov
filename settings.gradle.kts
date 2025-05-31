@@ -12,3 +12,4 @@ plugins {
 }
 
 includeBuild("geolocation")
+includeBuild("geolocation-libs")

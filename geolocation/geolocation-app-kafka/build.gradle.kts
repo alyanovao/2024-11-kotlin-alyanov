@@ -22,8 +22,10 @@ dependencies {
     implementation(project(":geolocation-api"))
     implementation(project(":geolocation-api-mappers"))
     implementation(project(":geolocation-biz"))
-    implementation(project(":geolocation-libs"))
     implementation(project(":geolocation-app-ktor"))
+    implementation("ru.aao.geolocation.libs:geolocation-cor")
+    implementation("ru.aao.geolocation.libs:geolocation-lib-logging")
     implementation("org.jetbrains.kotlinx:atomicfu:0.27.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:null")
 }

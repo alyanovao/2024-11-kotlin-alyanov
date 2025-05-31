@@ -2,7 +2,7 @@ package ru.aao.geolocation.common.ktor
 
 import ru.aao.geolocation.biz.GlProcessor
 import io.ktor.server.application.*
-import logger.GlLoggerProvider
+import ru.aao.geolocation.lib.logging.GlLoggerProvider
 import ru.aao.geolocation.common.GlSettings
 
 fun Application.initAppSettings(): GlAppSetting {
