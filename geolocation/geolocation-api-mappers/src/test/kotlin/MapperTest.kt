@@ -2,6 +2,7 @@ import ru.aao.geolocation.api.v1.models.*
 import ru.aao.geolocation.common.GeolocationContext
 import ru.aao.geolocation.common.models.*
 import ru.aao.geolocation.common.stubs.GlStubs
+import ru.aao.geolocation.lib.logging.LogLevel
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -56,6 +57,7 @@ class MapperTest {
                 code = "1",
                 group = "Test",
                 field = "comment",
+                level = LogLevel.ERROR,
                 message = "Not null message"
             )
             ),

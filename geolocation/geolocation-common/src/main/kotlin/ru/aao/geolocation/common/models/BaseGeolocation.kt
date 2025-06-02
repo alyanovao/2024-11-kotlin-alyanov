@@ -12,6 +12,9 @@ data class BaseGeolocation(
     var lock: GlLock = GlLock.NONE,
     var permissionClient: MutableSet<GlPermissionClient> = mutableSetOf()
 ) {
+    fun deepCopy(): BaseGeolocation = copy(
+        permissionClient = permissionClient.toMutableSet()
+    )
     fun isEmpty() = this == NONE
 
     companion object {

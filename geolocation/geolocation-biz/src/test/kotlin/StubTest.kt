@@ -6,7 +6,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class StubTest {
-    val processor: GlProcessor = GlProcessor()
+    private val processor: GlProcessor = GlProcessor()
 
     @Test
     fun create(): Unit = runTest {

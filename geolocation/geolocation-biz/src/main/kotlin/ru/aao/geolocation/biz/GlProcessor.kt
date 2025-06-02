@@ -2,28 +2,25 @@ package ru.aao.geolocation.biz
 
 import ru.aao.geolocation.biz.general.initStatus
 import ru.aao.geolocation.biz.general.operation
-import ru.aao.geolocation.biz.general.stubs
-import ru.aao.geolocation.biz.stubs.stubDBError
-import ru.aao.geolocation.biz.stubs.stubNoCase
-import ru.aao.geolocation.biz.stubs.stubReadSuccess
-import ru.aao.geolocation.biz.stubs.stubValidateBadDescription
+import ru.aao.geolocation.biz.repo.*
+import ru.aao.geolocation.biz.stubs.*
 import ru.aao.geolocation.biz.validation.*
 import ru.aao.geolocation.common.GeolocationContext
 import ru.aao.geolocation.common.GlSettings
-import ru.aao.geolocation.common.models.DeviceId
-import ru.aao.geolocation.common.models.GlCommand
-import ru.aao.geolocation.common.models.Latitude
-import ru.aao.geolocation.common.models.PersonId
-import ru.aao.geolocation.lib.cor.ICorExec
+import ru.aao.geolocation.common.models.*
+import ru.aao.geolocation.lib.cor.chain
 import ru.aao.geolocation.lib.cor.rootChain
 import ru.aao.geolocation.lib.cor.worker
 
-open class GlProcessor(val corSettings: GlSettings = GlSettings.NONE) {
-    private val corrSettings: GlSettings = corSettings
-    suspend fun exec(ctx: GeolocationContext) = businessChain.exec(ctx.also{ it.corSettings = corrSettings})
+open class GlProcessor(
+    private val corSettings: GlSettings = GlSettings.NONE) {
+    suspend fun exec(ctx: GeolocationContext) = businessChain.exec(
+        ctx.also { it.corSettings = corSettings}
+    )
 
-    private val businessChain: ICorExec<GeolocationContext> = rootChain {
+    private val businessChain = rootChain<GeolocationContext> {
         initStatus("Инициализация контекста")
+        initRepo("Инициализация репозитория")
 
         operation("Создание локации", GlCommand.CREATE) {
             stubs("Режим стаб") {
@@ -40,6 +37,12 @@ open class GlProcessor(val corSettings: GlSettings = GlSettings.NONE) {
                 validateLocationIsNotEmpty("Проверка координат")
                 finishValidation("Завершили проверки")
             }
+            chain {
+                title = "Логика сохранения"
+                repoPrepareCreate("Подготовка объекта для сохранения")
+                repoCreate("Создание объекта в БД")
+            }
+            prepareResult("Подготовка ответа")
         }
         operation("Получение текущих координат", GlCommand.READ_CURRENT) {
             stubs("Обработка стабов") {
@@ -52,9 +55,19 @@ open class GlProcessor(val corSettings: GlSettings = GlSettings.NONE) {
                 worker("Очистка personId") {validating.personId = PersonId(validating.personId.asLong()) }
                 worker("Очистка id") {validating.deviceId = DeviceId.NONE }
                 validatePersonIdIsNotEmpty("Проверка на не пустой personId")
-                validateDeviceIdIsnotEmpty("Проверка на не пустой deviceId")
+                validateDeviceIdIsNotEmpty("Проверка на не пустой deviceId")
                 finishValidation("Завершили проверки")
             }
+            chain {
+                description = "Логика чтения"
+                repoReadCurrent("Чтение из БД")
+                worker {
+                    title = "Подготовка ответа для ReadCurrent"
+                    active { state == GlState.RUNNING }
+                    handle { glRepoDone = glRepoRead }
+                }
+            }
+            prepareResult("Подготовка ответа")
         }
         operation("Получение координат", GlCommand.READ_ALL) {
             stubs("Обработка стабов") {
@@ -67,9 +80,19 @@ open class GlProcessor(val corSettings: GlSettings = GlSettings.NONE) {
                 worker("Очистка personId") {validating.personId = PersonId(validating.personId.asLong()) }
                 worker("Очистка id") {validating.deviceId = DeviceId.NONE }
                 validatePersonIdIsNotEmpty("Проверка на не пустой personId")
-                validateDeviceIdIsnotEmpty("Проверка на не пустой deviceId")
+                validateDeviceIdIsNotEmpty("Проверка на не пустой deviceId")
                 finishValidation("Завершили проверки")
             }
+            chain {
+                title = "Логика чтения"
+                repoReadCurrent("Чтение из БД")
+                worker {
+                    description = "Подготовка ответа для ReadAll"
+                    active { state == GlState.RUNNING }
+                    handle { glRepoDone = glRepoRead }
+                }
+            }
+            prepareResult("Подготовка ответа")
         }
         operation("Изменение текущих координат", GlCommand.UPDATE) {
             stubs("Обработка стабов") {
@@ -82,9 +105,16 @@ open class GlProcessor(val corSettings: GlSettings = GlSettings.NONE) {
                 worker("Очистка personId") {validating.personId = PersonId(validating.personId.asLong()) }
                 worker("Очистка id") {validating.deviceId = DeviceId.NONE }
                 validatePersonIdIsNotEmpty("Проверка на не пустой personId")
-                validateDeviceIdIsnotEmpty("Проверка на не пустой deviceId")
+                validateDeviceIdIsNotEmpty("Проверка на не пустой deviceId")
                 finishValidation("Завершили проверки")
             }
+            chain {
+                description = "Логика сохранения"
+                repoReadCurrent("Чтение из БД")
+                repoPrepareUpdate("Подготовка объекта для обновления")
+                repoUpdate("Обновление объекта")
+            }
+            prepareResult("Подготовка объекта")
         }
     }.build()
 }

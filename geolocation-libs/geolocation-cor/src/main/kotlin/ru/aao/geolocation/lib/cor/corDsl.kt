@@ -5,6 +5,7 @@ import ru.aao.geolocation.lib.cor.handle.CorWorkerDsl
 
 @CorDslMarker
 interface ICorExecDsl<T> {
+    var title: String
     var description: String
     fun active(function: suspend T.() -> Boolean)
     fun except(function: suspend T.(e: Throwable) -> Unit)
@@ -23,7 +24,9 @@ interface ICorWorkerDsl<T>: ICorExecDsl<T> {
 
 fun <T> rootChain(function: ICorChainDsl<T>.() -> Unit): ICorChainDsl<T> = CorChainDsl<T>().apply(function)
 
-fun <T> ICorChainDsl<T>.chain(function: ICorChainDsl<T>.() -> Unit) = add(CorChainDsl<T>().apply(function))
+fun <T> ICorChainDsl<T>.chain(function: ICorChainDsl<T>.() -> Unit) {
+    add(CorChainDsl<T>().apply(function))
+}
 
 fun <T> ICorChainDsl<T>.worker(function: ICorWorkerDsl<T>.() -> Unit) {
     add(CorWorkerDsl<T>().apply(function))
@@ -34,6 +37,7 @@ fun <T> ICorChainDsl<T>.worker(
     blockHandle: T.() -> Unit
 ) {
     add(CorWorkerDsl<T>().also {
+        it.title = title
         it.description = description
         it.handle(blockHandle)
     })

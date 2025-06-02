@@ -11,23 +11,9 @@ import ru.aao.geolocation.common.models.GlError
 import ru.aao.geolocation.common.models.GlState
 import ru.aao.geolocation.api.v1.models.IRequest
 import ru.aao.geolocation.api.v1.models.IResponse
+import ru.aao.geolocation.common.models.GlCommand
 import toTransport
 import kotlin.reflect.KClass
-
-suspend inline fun <reified Q: IRequest, reified S: IResponse> ApplicationCall.process(
-    appSetting: GlAppSetting,
-    clazz: KClass<*>,
-    logId: String
-) = appSetting.controllerHelper(
-    {
-        fromTransport(receive<Q>())
-    },
-    {
-        respond(toTransport())
-    },
-    clazz,
-    logId
-)
 
 suspend inline fun <T> IGlAppSettings.controllerHelper(
     crossinline getRequest: suspend GeolocationContext.() -> Unit,
@@ -57,6 +43,9 @@ suspend inline fun <T> IGlAppSettings.controllerHelper(
         ctx.state = GlState.FAILING
         ctx.errors.add(GlError(message = e.message ?: ""))
         processor.exec(ctx)
+        if (ctx.command == GlCommand.NONE) {
+            ctx.command = GlCommand.READ_CURRENT
+        }
         ctx.toResponse()
     }
 }

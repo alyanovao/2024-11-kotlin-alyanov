@@ -3,6 +3,7 @@ package ru.aao.geolocation.lib.cor.handle
 import ru.aao.geolocation.lib.cor.CorDslMarker
 import ru.aao.geolocation.lib.cor.ICorExec
 import ru.aao.geolocation.lib.cor.ICorWorkerDsl
+import kotlin.reflect.full.staticFunctions
 
 class CorWorker<T> (
     description: String = "",
@@ -15,15 +16,15 @@ class CorWorker<T> (
 
 @CorDslMarker
 class CorWorkerDsl<T>: CorExecDsl<T>(), ICorWorkerDsl<T> {
-    private val handle: suspend T.() -> Unit = {}
+    private var blockHandle: suspend T.() -> Unit = {}
     override fun handle(function: suspend T.() -> Unit) {
-        handle(function)
+        blockHandle = function
     }
 
     override fun build(): ICorExec<T> = CorWorker(
         description = description,
         active = active,
-        blockHandle = handle,
+        blockHandle = blockHandle,
         except = except
     )
 }

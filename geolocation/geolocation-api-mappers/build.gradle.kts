@@ -10,5 +10,6 @@ dependencies{
     implementation(project(":geolocation-api"))
     implementation(project(":geolocation-common"))
     implementation(libs.kotlinx.datetime)
+    implementation("ru.aao.geolocation.libs:geolocation-lib-logging")
     testImplementation(kotlin("test-junit"))
 }

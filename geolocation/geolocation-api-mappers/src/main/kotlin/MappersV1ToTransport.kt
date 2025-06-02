@@ -26,7 +26,7 @@ fun MutableList<ru.aao.geolocation.common.models.BaseGeolocation>.toTransport() 
     .map{it.toTransport()}
     .toList()
 
-fun ru.aao.geolocation.common.models.BaseGeolocation.toTransport(): ResponseObject = ResponseObject(
+internal fun ru.aao.geolocation.common.models.BaseGeolocation.toTransport(): ResponseObject = ResponseObject(
     deviceId = deviceId.takeIf { it != DeviceId.NONE }?.asLong(),
     personId = personId.takeIf { it != PersonId.NONE }?.asLong(),
     longitude = longitude.takeIf { it != Longitude.NONE }?.asDouble(),
@@ -38,59 +38,60 @@ fun ru.aao.geolocation.common.models.BaseGeolocation.toTransport(): ResponseObje
     permissions = permissionClient.toTransport()
 )
 
-fun GlPermissionClient.toTransport() = when(this) {
+internal fun GlPermissionClient.toTransport() = when(this) {
     GlPermissionClient.READ -> Permissions.READ
     GlPermissionClient.UPDATE -> Permissions.UPDATE
     GlPermissionClient.DELETE -> Permissions.DELETE
 }
-fun Set<GlPermissionClient>.toTransport(): Set<Permissions>? = this
+
+internal fun Set<GlPermissionClient>.toTransport(): Set<Permissions>? = this
     .map { it.toTransport() }
     .toSet()
     .takeIf { it.isNotEmpty() }
 
-fun GeolocationContext.toTransportReadCurrent() = IReadCurrentLocationResponse(
+internal fun GeolocationContext.toTransportReadCurrent() = IReadCurrentLocationResponse(
     result = state.toResult(),
     errors = errors.toTransportErrors(),
     gl = glResponse.toTransport()
 )
 
-fun GeolocationContext.toTransportReadAll() = IReadAllLocationResponse(
+internal fun GeolocationContext.toTransportReadAll() = IReadAllLocationResponse(
     result = state.toResult(),
     errors = errors.toTransportErrors(),
     gls = glResponseList.toTransport()
 )
 
-fun GeolocationContext.toTransportUpdate() = IUpdateLocationResponse(
+internal fun GeolocationContext.toTransportUpdate() = IUpdateLocationResponse(
     result = state.toResult(),
     errors = errors.toTransportErrors(),
     gl = glResponse.toTransport()
 )
 
-fun GeolocationContext.toTransportDelete() = IDeleteLocationResponse(
+internal fun GeolocationContext.toTransportDelete() = IDeleteLocationResponse(
     result = state.toResult(),
     errors = errors.toTransportErrors(),
     gl = glResponse.toTransport()
 )
 
-fun GeolocationContext.toTransportSearch() = ISearchLocationResponse(
+internal fun GeolocationContext.toTransportSearch() = ISearchLocationResponse(
     result = state.toResult(),
     errors = errors.toTransportErrors(),
     gls = glResponseList.toTransport()
 )
 
-private fun GlState.toResult(): ResponseResult? = when (this) {
+internal fun GlState.toResult(): ResponseResult? = when (this) {
     GlState.RUNNING -> ResponseResult.SUCCESS
     GlState.FAILING -> ResponseResult.ERROR
     GlState.FINISHED -> ResponseResult.SUCCESS
     GlState.NONE -> null
 }
 
-private fun List<GlError>.toTransportErrors(): List<Error>? = this
+internal fun List<GlError>.toTransportErrors(): List<Error>? = this
     .map{ it.toTransportGl() }
     .toList()
     .takeIf { it.isNotEmpty() }
 
-private fun GlError.toTransportGl() = Error(
+internal fun GlError.toTransportGl() = Error(
     code = code.takeIf { it.isNotBlank() },
     group = group.takeIf { it.isNotBlank() },
     field = field.takeIf { it.isNotBlank() },
