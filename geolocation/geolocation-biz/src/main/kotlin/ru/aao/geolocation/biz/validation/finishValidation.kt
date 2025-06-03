@@ -8,5 +8,7 @@ import ru.aao.geolocation.lib.cor.worker
 fun ICorChainDsl<GeolocationContext>.finishValidation(description: String) = worker {
     this.description = description
     active { state == GlState.RUNNING }
-    handle { validated = validating }
+    handle {
+        validated = validating
+    }
 }

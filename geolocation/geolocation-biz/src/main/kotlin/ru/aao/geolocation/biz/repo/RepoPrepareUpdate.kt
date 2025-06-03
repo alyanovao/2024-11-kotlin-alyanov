@@ -16,6 +16,8 @@ fun ICorChainDsl<GeolocationContext>.repoPrepareUpdate(title: String) = worker {
             this.latitude = validated.latitude
             this.longitude = validated.longitude
             this.altitude = validated.altitude
+            this.bearing = validated.bearing
+            this.batteryLevel = validated.batteryLevel
         }
     }
 }

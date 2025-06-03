@@ -1,10 +1,8 @@
-import ru.aao.geolocation.common.exceptions.UnknownGeolocationCommand
 import ru.aao.geolocation.api.v1.models.*
 import ru.aao.geolocation.common.GeolocationContext
+import ru.aao.geolocation.common.exceptions.UnknownGeolocationCommand
 import ru.aao.geolocation.common.models.*
-import ru.aao.geolocation.common.models.Altitude
-import ru.aao.geolocation.common.models.DeviceId
-import ru.aao.geolocation.common.models.Latitude
+import ru.aao.geolocation.common.models.BaseGeolocation
 
 fun GeolocationContext.toTransport(): IResponse = when (val cmd = command) {
     GlCommand.CREATE -> toTransportCreate()
@@ -22,13 +20,14 @@ fun GeolocationContext.toTransportCreate() = ICreateLocationResponse(
     gl = glResponse.toTransport()
 )
 
-fun MutableList<ru.aao.geolocation.common.models.BaseGeolocation>.toTransport() = this
+fun MutableList<BaseGeolocation>.toTransport() = this
     .map{it.toTransport()}
     .toList()
 
-internal fun ru.aao.geolocation.common.models.BaseGeolocation.toTransport(): ResponseObject = ResponseObject(
-    deviceId = deviceId.takeIf { it != DeviceId.NONE }?.asLong(),
+internal fun BaseGeolocation.toTransport(): ResponseObject = ResponseObject(
+    id = id.takeIf { it != GeolocationId.NONE }?.asLong(),
     personId = personId.takeIf { it != PersonId.NONE }?.asLong(),
+    deviceId = deviceId.takeIf { it != DeviceId.NONE }?.asLong(),
     longitude = longitude.takeIf { it != Longitude.NONE }?.asDouble(),
     latitude = latitude.takeIf { it != Latitude.NONE }?.asDouble(),
     bearing = bearing.takeIf { it != Bearing.NONE }?.asDouble(),

@@ -29,8 +29,8 @@ class MapperTest {
 
         assertEquals(GlStubs.SUCCESS, context.stubCase)
         assertEquals(GlWorkMode.STUB, context.workMode)
-        assertEquals(DeviceId(1), context.location.deviceId)
         assertEquals(PersonId(1), context.location.personId)
+        assertEquals(DeviceId(1), context.location.deviceId)
         assertEquals(Latitude(45.05), context.location.latitude)
         assertEquals(Longitude(39.0), context.location.longitude)
         assertEquals(Bearing(0.0), context.location.bearing)

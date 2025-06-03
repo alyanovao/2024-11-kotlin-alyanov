@@ -1,6 +1,7 @@
 package ru.aao.geolocation.common.models
 
 data class BaseGeolocation(
+    var id: GeolocationId = GeolocationId.NONE,
     var personId: PersonId = PersonId.NONE,
     var deviceId: DeviceId = DeviceId.NONE,
     var longitude: Longitude = Longitude.NONE,

@@ -3,9 +3,9 @@ package ru.aao.geolocation.common.repository
 interface IRepository {
     suspend fun create(request: DBGlRequest): IDBGlResponse
     suspend fun readCurrent(request: DBGlIdRequest): IDBGlResponse
-    suspend fun readAll(request: DBGlIdRequest): IDBGlsResponse
+    suspend fun readAll(request: DBGlRequest): IDBGlsResponse
     suspend fun update(request: DBGlRequest): IDBGlResponse
-    suspend fun delete(request: DBGlIdRequest): IDBGlResponse
+    suspend fun delete(request: DBGlRequest): IDBGlResponse
     companion object {
         val NONE = object : IRepository {
             override suspend fun create(request: DBGlRequest): IDBGlResponse {
@@ -16,7 +16,7 @@ interface IRepository {
                 TODO("Not yet implemented")
             }
 
-            override suspend fun readAll(request: DBGlIdRequest): IDBGlsResponse {
+            override suspend fun readAll(request: DBGlRequest): IDBGlsResponse {
                 TODO("Not yet implemented")
             }
 
@@ -24,7 +24,7 @@ interface IRepository {
                 TODO("Not yet implemented")
             }
 
-            override suspend fun delete(request: DBGlIdRequest): IDBGlResponse {
+            override suspend fun delete(request: DBGlRequest): IDBGlResponse {
                 TODO("Not yet implemented")
             }
         }

@@ -6,10 +6,11 @@ import ru.aao.geolocation.common.models.GlError
 import ru.aao.geolocation.lib.cor.ICorChainDsl
 import ru.aao.geolocation.lib.cor.worker
 
-fun ICorChainDsl<GeolocationContext>.validateDescriptionNotEmpty(description: String) = worker() {
+fun ICorChainDsl<GeolocationContext>.validateDescriptionNotEmpty(title: String) = worker() {
+    this.title = title
     this.description = "Валидация"
-    this.active { validating.altitude == Altitude.NONE }
-    this.except {
+    active { validating.altitude == Altitude.NONE }
+    handle {
         errors.add(
             GlError(field = "altitude", message = "Altitude is empty"
         ))

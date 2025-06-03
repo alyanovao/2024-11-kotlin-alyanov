@@ -7,7 +7,8 @@ import ru.aao.geolocation.biz.stubs.*
 import ru.aao.geolocation.biz.validation.*
 import ru.aao.geolocation.common.GeolocationContext
 import ru.aao.geolocation.common.GlSettings
-import ru.aao.geolocation.common.models.*
+import ru.aao.geolocation.common.models.GlCommand
+import ru.aao.geolocation.common.models.GlState
 import ru.aao.geolocation.lib.cor.chain
 import ru.aao.geolocation.lib.cor.rootChain
 import ru.aao.geolocation.lib.cor.worker
@@ -18,7 +19,7 @@ open class GlProcessor(
         ctx.also { it.corSettings = corSettings}
     )
 
-    private val businessChain = rootChain<GeolocationContext> {
+    private val businessChain = rootChain {
         initStatus("Инициализация контекста")
         initRepo("Инициализация репозитория")
 
@@ -30,9 +31,7 @@ open class GlProcessor(
                 stubNoCase("Ошибка :: запрошенный stub не доступен")
             }
             validation {
-                worker("Копируем поля в geo") {validating = location.copy()}
-                worker("Очистка id") {validating.personId = PersonId.NONE}
-                worker("Очистка координат") {validating.latitude = Latitude.NONE}
+                worker("Копируем поля в geo") { validating = location.copy() }
                 validateDescriptionNotEmpty("Проверка описания")
                 validateLocationIsNotEmpty("Проверка координат")
                 finishValidation("Завершили проверки")
@@ -51,9 +50,7 @@ open class GlProcessor(
                 stubNoCase("Ошибка :: запрошенный stub не доступен")
             }
             validation {
-                worker("Копируем поля в validating") {validating = location.copy()}
-                worker("Очистка personId") {validating.personId = PersonId(validating.personId.asLong()) }
-                worker("Очистка id") {validating.deviceId = DeviceId.NONE }
+                worker("Копируем поля в validating") { validating = location.deepCopy() }
                 validatePersonIdIsNotEmpty("Проверка на не пустой personId")
                 validateDeviceIdIsNotEmpty("Проверка на не пустой deviceId")
                 finishValidation("Завершили проверки")
@@ -76,20 +73,20 @@ open class GlProcessor(
                 stubNoCase("Ошибка :: запрошенный stub не доступен")
             }
             validation {
-                worker("Копируем поля в validating") {validating = location.copy()}
-                worker("Очистка personId") {validating.personId = PersonId(validating.personId.asLong()) }
-                worker("Очистка id") {validating.deviceId = DeviceId.NONE }
+                worker("Копируем поля в validating") {validating = location.deepCopy()}
                 validatePersonIdIsNotEmpty("Проверка на не пустой personId")
                 validateDeviceIdIsNotEmpty("Проверка на не пустой deviceId")
                 finishValidation("Завершили проверки")
             }
             chain {
                 title = "Логика чтения"
-                repoReadCurrent("Чтение из БД")
+                repoReadAll("Чтение из БД")
                 worker {
                     description = "Подготовка ответа для ReadAll"
                     active { state == GlState.RUNNING }
-                    handle { glRepoDone = glRepoRead }
+                    handle {
+                        glRepoDone = glRepoRead
+                    }
                 }
             }
             prepareResult("Подготовка ответа")
@@ -101,9 +98,7 @@ open class GlProcessor(
                 stubNoCase("Ошибка :: запрошенный stub не доступен")
             }
             validation {
-                worker("Копируем поля в validating") {validating = location.copy()}
-                worker("Очистка personId") {validating.personId = PersonId(validating.personId.asLong()) }
-                worker("Очистка id") {validating.deviceId = DeviceId.NONE }
+                worker("Копируем поля в validating") {validating = location.deepCopy()}
                 validatePersonIdIsNotEmpty("Проверка на не пустой personId")
                 validateDeviceIdIsNotEmpty("Проверка на не пустой deviceId")
                 finishValidation("Завершили проверки")
@@ -113,6 +108,26 @@ open class GlProcessor(
                 repoReadCurrent("Чтение из БД")
                 repoPrepareUpdate("Подготовка объекта для обновления")
                 repoUpdate("Обновление объекта")
+            }
+            prepareResult("Подготовка объекта")
+        }
+        operation("Изменение текущих координат", GlCommand.DELETE) {
+            stubs("Обработка стабов") {
+                stubReadSuccess("Успешное получение", corSettings)
+                stubDBError("Ошибка базы данных", corSettings)
+                stubNoCase("Ошибка :: запрошенный stub не доступен")
+            }
+            validation {
+                worker("Копируем поля в validating") {validating = location.deepCopy()}
+                validatePersonIdIsNotEmpty("Проверка на не пустой personId")
+                validateDeviceIdIsNotEmpty("Проверка на не пустой deviceId")
+                validatePersonIdIsNotEmpty("Проверка на не пустой personId")
+                finishValidation("Завершили проверки")
+            }
+            chain {
+                description = "Логика сохранения"
+                repoReadCurrent("Чтение из БД")
+                repoDelete("Обновление объекта")
             }
             prepareResult("Подготовка объекта")
         }

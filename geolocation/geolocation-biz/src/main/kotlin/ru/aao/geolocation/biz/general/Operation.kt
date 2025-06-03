@@ -12,6 +12,9 @@ fun ICorChainDsl<GeolocationContext>.operation(
     block: ICorChainDsl<GeolocationContext>.() -> Unit
 ) = chain {
     block()
+    this.title = title
     this.description = description
-    active { this.command == command && this.state == GlState.RUNNING }
+    active {
+        this.command == command && this.state == GlState.RUNNING
+    }
 }

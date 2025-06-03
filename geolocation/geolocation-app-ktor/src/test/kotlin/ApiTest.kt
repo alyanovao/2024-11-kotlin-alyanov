@@ -32,7 +32,7 @@ class ApiTest {
     ) { response ->
         val res = response.body<ICreateLocationResponse>()
         assertEquals(200, response.status.value)
-       // assertEquals(2L, res.gl?.deviceId)
+        assertEquals(2L, res.gl?.deviceId)
     }
 
     @Test
@@ -48,8 +48,8 @@ class ApiTest {
     ) { response ->
         val res = response.body<IReadCurrentLocationResponse>()
         assertEquals(200, response.status.value)
-        //assertEquals(2L, res.gl?.deviceId)
-        //assertEquals("success", res.result?.value)
+        assertEquals(2L, res.gl?.deviceId)
+        assertEquals("success", res.result?.value)
     }
 
     private fun v1TestApplication(

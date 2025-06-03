@@ -148,6 +148,7 @@ components:
         mapping:
           create: "#/components/schemas/ICreateLocationRequest"
           read: "#/components/schemas/IReadCurrentLocationRequest"
+          readAll: "#/components/schemas/IReadAllLocationRequest"
           update: "#/components/schemas/IUpdateLocationRequest"
           delete: "#/components/schemas/IDeleteLocationRequest"
           search: "#/components/schemas/ISearchLocationRequest"
@@ -210,7 +211,7 @@ components:
         - $ref: "#/components/schemas/RequestModeParam"
         - type: object
           properties:
-            device:
+            gl:
               $ref: "#/components/schemas/ReadObject"
 
     IReadAllLocationRequest:
@@ -219,7 +220,7 @@ components:
         - $ref: "#/components/schemas/RequestModeParam"
         - type: object
           properties:
-            device:
+            gl:
               $ref: "#/components/schemas/ReadAllObject"
 
     IUpdateLocationRequest:
@@ -228,7 +229,7 @@ components:
         - $ref: "#/components/schemas/RequestModeParam"
         - type: object
           properties:
-            device:
+            gl:
               $ref: "#/components/schemas/UpdateObject"
 
     IDeleteLocationRequest:
@@ -237,7 +238,7 @@ components:
         - $ref: "#/components/schemas/RequestModeParam"
         - type: object
           properties:
-            device:
+            gl:
               $ref: "#/components/schemas/DeleteObject"
 
     ISearchLocationRequest:
@@ -246,7 +247,7 @@ components:
         - $ref: "#/components/schemas/RequestModeParam"
         - type: object
           properties:
-            device:
+            gl:
               $ref: "#/components/schemas/UpdateObject"
 
     CreateObject:
@@ -257,6 +258,8 @@ components:
       allOf:
         - type: object
           properties:
+            id:
+              $ref: "#/components/schemas/GlId"
             personId:
               $ref: "#/components/schemas/PersonId"
             deviceId:
@@ -265,6 +268,8 @@ components:
       allOf:
         - type: object
           properties:
+            id:
+              $ref: "#/components/schemas/GlId"
             personId:
               $ref: "#/components/schemas/PersonId"
             deviceId:
@@ -272,8 +277,12 @@ components:
 
     UpdateObject:
       allOf:
+        - $ref: "#/components/schemas/BaseGeolocation"
+
         - type: object
           properties:
+            id:
+              $ref: "#/components/schemas/GlId"
             personId:
               $ref: "#/components/schemas/PersonId"
             deviceId:
@@ -284,6 +293,8 @@ components:
       allOf:
         - type: object
           properties:
+            id:
+              $ref: "#/components/schemas/GlId"
             personId:
               $ref: "#/components/schemas/PersonId"
             deviceId:
@@ -321,6 +332,10 @@ components:
         - $ref: "#/components/schemas/IResponse"
         - $ref: "#/components/schemas/ResponseMulti"
 
+#    Id:
+#      type: long
+#      description: Идентификатор локации
+
     PersonId:
       type: long
       description: идентификатор владельца устройства
@@ -330,7 +345,7 @@ components:
       description: Идентификатор устройства
 
     GlId:
-      type: string
+      type: long
       description: идентификатор позиции
 
     GlLock:
@@ -341,6 +356,9 @@ components:
       type: object
       description: объект ответа
       properties:
+        id:
+          type: long
+          description: идентификатор локации
         personId:
           type: long
           description: идентификатор владельца устройства

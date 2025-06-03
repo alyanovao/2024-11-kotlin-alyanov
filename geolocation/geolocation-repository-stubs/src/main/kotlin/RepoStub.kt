@@ -16,7 +16,7 @@ class RepoStub(): IRepository {
         )
     }
 
-    override suspend fun readAll(request: DBGlIdRequest): IDBGlsResponse {
+    override suspend fun readAll(request: DBGlRequest): IDBGlsResponse {
         return DBGlsResponseOk(
             data = listOf(GEOLOCATION)
         )
@@ -28,7 +28,7 @@ class RepoStub(): IRepository {
         )
     }
 
-    override suspend fun delete(request: DBGlIdRequest): IDBGlResponse {
+    override suspend fun delete(request: DBGlRequest): IDBGlResponse {
         return DBGlResponseOk(
             data = GEOLOCATION
         )

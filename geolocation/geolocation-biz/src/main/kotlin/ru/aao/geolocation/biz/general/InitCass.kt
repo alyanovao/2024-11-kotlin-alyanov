@@ -8,6 +8,10 @@ import ru.aao.geolocation.lib.cor.worker
 fun ICorChainDsl<GeolocationContext>.initStatus(title: String) = worker() {
     this.title = title
     this.description = "Инициализация статуса"
-    active { state == GlState.NONE }
-    except { state == GlState.RUNNING }
+    active {
+        state == GlState.NONE
+    }
+    handle {
+        state = GlState.RUNNING
+    }
 }

@@ -4,10 +4,9 @@ import com.benasher44.uuid.uuid4
 import io.github.reactivecircus.cache4k.Cache
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import ru.aao.geolocation.common.GeolocationContext
 import ru.aao.geolocation.common.models.BaseGeolocation
+import ru.aao.geolocation.common.models.GeolocationId
 import ru.aao.geolocation.common.models.GlLock
-import ru.aao.geolocation.common.models.PersonId
 import ru.aao.geolocation.common.repository.*
 import ru.aao.geolocation.common.repository.exception.RepoEmptyLockException
 import ru.aao.geolocation.repository.common.IRepoInitialize
@@ -32,33 +31,35 @@ class RepoInMemory (
     }
 
     override suspend fun create(request: DBGlRequest): IDBGlResponse = tryGlMethod {
-        val randomKey = Random.nextLong(Long.MIN_VALUE, Long.MAX_VALUE)
-        val key = randomKey.toString()
+        val key = Random.nextLong(0, Long.MAX_VALUE)
+
         val gl = request.request.copy(
-            personId = PersonId(randomKey), lock = GlLock(key.toString())
+            id = GeolocationId(key),
+            lock = GlLock(key.toString())
         )
         val entity = GlEntity(gl)
         mutex.withLock{
-            cache.put(key, entity)
+            cache.put(key.toString(), entity)
         }
         DBGlResponseOk(gl)
     }
 
     override suspend fun readCurrent(request: DBGlIdRequest): IDBGlResponse = tryGlMethod{
-        val key = request.personId.toString()
+        val key = request.id.asLong();
         mutex.withLock{
-            cache.get(key)
+            cache.get(key.toString())
                 ?.let {
                     DBGlResponseOk(it.toInternal())
-                } ?: errorNoFound(request.personId)
+                } ?: errorNoFound(request.id);
         }
     }
 
-    override suspend fun readAll(request: DBGlIdRequest): IDBGlsResponse = tryGlsMethod{
+    override suspend fun readAll(request: DBGlRequest): IDBGlsResponse = tryGlsMethod{
         val result: List<BaseGeolocation> = cache.asMap().asSequence()
             .filter { entity ->
-                request.personId.takeIf { it != PersonId.NONE }?.let {
-                    it.asLong() == entity.key
+                request.request.takeIf { it != null }?.let {
+                it.personId.asLong().toString() == entity.value.personId &&
+                it.deviceId.asLong().toString() == entity.value.deviceId
                 } ?: true
             }
             .map { it.value.toInternal() }
@@ -68,31 +69,35 @@ class RepoInMemory (
 
     override suspend fun update(request: DBGlRequest): IDBGlResponse = tryGlMethod{
         val request = request.request
-        val id = request.personId
-        val key = request.personId.toString()
+        val id = request.id.takeIf { it != GeolocationId.NONE } ?: GeolocationId.NONE
+        val key = request.id.asLong()
         mutex.withLock {
-            val oldPersonId = cache.get(key)?.toInternal()
+            val oldId = cache.get(key.toString())?.toInternal()
             when {
-                oldPersonId == null -> errorNoFound(id)
-                oldPersonId.lock == GlLock.NONE -> errorDb(RepoEmptyLockException(id))
+                oldId == null -> errorNoFound(id)
                 else -> {
                     val newGl = request.copy(lock = GlLock(randomUuid()))
                     val entity = GlEntity(newGl)
-                    cache.put(key, entity)
+                    cache.put(key.toString(), entity)
                     DBGlResponseOk(newGl)
                 }
             }
         }
     }
 
-    override suspend fun delete(request: DBGlIdRequest): IDBGlResponse = tryGlMethod{
-        val id = request.personId
-        val key = id.toString()
+    override suspend fun delete(request: DBGlRequest): IDBGlResponse = tryGlMethod{
+        val id = request.request.id
+        val personId = request.request.personId
+        val deviceId = request.request.deviceId
+        val key = id.asLong().toString()
         mutex.withLock {
             val oldGl = cache.get(key)?.toInternal()
+            val oldPersonId = oldGl?.personId
+            val oldDeviceId = oldGl?.deviceId
             when {
                 oldGl == null -> errorNoFound(id)
-                oldGl.lock == GlLock.NONE -> errorDb(RepoEmptyLockException(id))
+                personId != oldPersonId -> errorNoFound(id)
+                deviceId != oldDeviceId -> errorNoFound(id)
                 else -> {
                     cache.invalidate(key)
                     DBGlResponseOk(oldGl)

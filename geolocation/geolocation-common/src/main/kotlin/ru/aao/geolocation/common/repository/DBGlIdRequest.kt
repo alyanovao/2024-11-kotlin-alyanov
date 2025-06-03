@@ -1,10 +1,10 @@
 package ru.aao.geolocation.common.repository
 
 import ru.aao.geolocation.common.models.BaseGeolocation
-import ru.aao.geolocation.common.models.PersonId
+import ru.aao.geolocation.common.models.GeolocationId
 
 data class DBGlIdRequest(
-    val personId: PersonId
+    val id: GeolocationId
 ) {
-    constructor(request: BaseGeolocation): this(request.personId)
+    constructor(request: BaseGeolocation): this(request.id)
 }

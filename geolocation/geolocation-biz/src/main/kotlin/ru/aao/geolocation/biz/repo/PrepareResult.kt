@@ -12,7 +12,7 @@ fun ICorChainDsl<GeolocationContext>.prepareResult(title: String) = worker {
     active { workMode != GlWorkMode.STUB }
     handle {
         glResponse = glRepoDone
-        glsRepoDone = glsRepoDone
+        glResponseList = glsRepoDone
         state = when(val st = state) {
             GlState.RUNNING -> GlState.FINISHED
             else -> st
