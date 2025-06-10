@@ -51,5 +51,6 @@ dependencies {
     implementation(project(":geolocation-stub"))
     implementation(project(":geolocation-repository-common"))
     implementation(project(":geolocation-repository-inmemory"))
+    implementation(project(":geolocation-repository-postgres"))
     implementation(project(":geolocation-repository-stubs"))
 }

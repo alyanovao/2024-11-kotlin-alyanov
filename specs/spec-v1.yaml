@@ -421,7 +421,9 @@ components:
           properties:
             id:
               $ref: "#/components/schemas/GlId"
-            ownerId:
+            personId:
+              $ref: "#/components/schemas/PersonId"
+            lock:
               $ref: "#/components/schemas/GlLock"
             permissions:
               type: array

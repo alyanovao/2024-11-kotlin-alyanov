@@ -34,7 +34,8 @@ internal fun BaseGeolocation.toTransport(): ResponseObject = ResponseObject(
     altitude = altitude.takeIf { it != Altitude.NONE }?.asDouble(),
     eventDateTime = eventDateTime.takeIf { it != EventDateTime.NONE }?.asString(),
     batteryLevel = batteryLevel.takeIf { it != BatteryLevel.NONE }?.asFloat(),
-    permissions = permissionClient.toTransport()
+    permissions = permissionClient.toTransport(),
+    lock = lock.takeIf { it != GlLock.NONE }?.asString()
 )
 
 internal fun GlPermissionClient.toTransport() = when(this) {

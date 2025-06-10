@@ -169,3 +169,9 @@ docker login
 ```shell
 docker-compose -p geolocation -f ../docker/docker-compose.yaml up -d
 ```
+
+
+# Запуск Postgres
+```shell
+docker-compose -p postgress -f ../docker/docker-compose-db.yaml up -d
+```
