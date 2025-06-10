@@ -7,6 +7,7 @@ import ru.aao.geolocation.common.models.BaseGeolocation
 import ru.aao.geolocation.common.models.DeviceId
 import ru.aao.geolocation.common.models.GeolocationId
 import ru.aao.geolocation.common.models.PersonId
+import kotlin.random.Random
 
 class GlTable(table: String): Table(table) {
     val id = text(SqlField.ID)
@@ -24,7 +25,7 @@ class GlTable(table: String): Table(table) {
     )
 
     fun to(it: UpdateBuilder<*>, res: BaseGeolocation, randomUuid: () -> String) {
-        it[id] = res.id.takeIf { it != GeolocationId.NONE }?.asLong()?.toString() ?: randomUuid()
+        it[id] = res.id.takeIf { it != GeolocationId.NONE }?.asLong()?.toString() ?: Random.nextLong(1, 100000).toString()
         it[personId] = res.personId.takeIf { it != PersonId.NONE }?.asLong()?.toString() ?: randomUuid()
         it[deviceId] = res.deviceId.takeIf { it != DeviceId.NONE }?.asLong()?.toString() ?: randomUuid()
     }
