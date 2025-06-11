@@ -72,29 +72,30 @@ open class RepoSql(
         DBGlResponseOk(saveGl(request.request))
     }
 
-    override suspend fun readCurrent(request: DBGlIdRequest): IDBGlResponse {
+    override suspend fun readCurrent(request: DBGlIdRequest): IDBGlResponse = transaction(connection) {
         val res = table.selectAll().where {
-            table.id eq request.toString()
-        }.singleOrNull() ?: return errorNoFound(request.id)
-        return DBGlResponseOk(table.from(res))
+            table.id eq request.id.asLong().toString()
+        }.singleOrNull() ?: return@transaction errorNoFound(request.id)
+        return@transaction DBGlResponseOk(table.from(res))
     }
 
-    override suspend fun readAll(request: DBGlRequest): IDBGlsResponse {
-        val res = table.selectAll().where {
-            table.id eq request.toString()
-        }.single()
-        return DBGlsResponseOk(listOf(table.from(res)))
+    override suspend fun readAll(request: DBGlRequest): IDBGlsResponse = transaction(connection) {
+        val res = table.selectAll()
+        return@transaction DBGlsResponseOk(data = res.map{table.from(it)})
     }
 
     private fun read(id: GeolocationId): IDBGlResponse {
         val res = table.selectAll().where {
-            table.id eq id.toString()
+            table.id eq id.asLong().toString()
         }.singleOrNull() ?: return errorNoFound(id)
         return DBGlResponseOk(table.from(res))
     }
 
-    override suspend fun update(request: DBGlRequest): IDBGlResponse {
-        TODO("Not yet implemented")
+    override suspend fun update(request: DBGlRequest): IDBGlResponse = update(request.request.id, request.request.lock) {
+        table.update({ table.id eq request.request.id.asLong().toString() }) {
+            to(it, request.request.copy(lock = GlLock(randomUuid())), randomUuid)
+        }
+        read(request.request.id)
     }
 
     private suspend fun update(
@@ -104,7 +105,7 @@ open class RepoSql(
     ): IDBGlResponse = transactionWrapper {
         if (id == GeolocationId.NONE) return@transactionWrapper errorEmptyId
         val current = table.selectAll().where {
-            table.id eq id.toString()
+            table.id eq id.asLong().toString()
         }.singleOrNull() ?.let {table.from(it)}
 
         when {
@@ -114,7 +115,7 @@ open class RepoSql(
     }
 
     override suspend fun delete(request: DBGlRequest): IDBGlResponse = update(request.request.id, request.request.lock) {
-        table.deleteWhere { id eq request.request.id.toString() }
+        table.deleteWhere { id eq request.request.id.asLong().toString() }
         DBGlResponseOk(it)
     }
 }
