@@ -151,15 +151,15 @@ User Story 3: Просмотр истории перемещений за пер
 
 ### Команды сборки проекта
 ```shell
-docker build -f Dockerfile -t geolocation:0.0.1 .
+docker build -f Dockerfile -t geolocation:0.0.2 .
 ```
 
 ```shell
-docker tag geolocation:0.0.1 alyanovao/geolocation:0.0.1
+docker tag geolocation:0.0.2 alyanovao/geolocation:0.0.2
 ```
 
 ```shell
-docker push alyanovao/geolocation:0.0.1
+docker push alyanovao/geolocation:0.0.2
 ```
 
 ```shell
@@ -167,7 +167,7 @@ docker login
 ```
 
 ```shell
-docker-compose -p geolocation -f ../docker/docker-compose.yaml up -d
+docker-compose -p geolocation -f ../docker/docker-compose-ktor.yaml up -d
 ```
 
 
