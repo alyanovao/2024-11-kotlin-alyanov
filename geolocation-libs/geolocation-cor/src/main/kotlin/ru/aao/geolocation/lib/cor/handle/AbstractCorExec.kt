@@ -27,6 +27,7 @@ abstract class AbstractCorExec<T>(
 }
 
 abstract class CorExecDsl<T>: ICorExecDsl<T> {
+    override var title: String = ""
     override var description: String = ""
     protected var active: suspend T.() -> Boolean = { true }
     protected var except: suspend T.(Throwable) -> Unit = {e: Throwable -> throw e}

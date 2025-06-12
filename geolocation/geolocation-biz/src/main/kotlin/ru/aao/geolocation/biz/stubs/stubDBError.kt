@@ -10,7 +10,7 @@ import ru.aao.geolocation.lib.cor.worker
 fun ICorChainDsl<GeolocationContext>.stubDBError(description: String, corSetting: GlSettings) = worker {
     this.description = description
     active { stubCase == GlStubs.DB_ERROR && state == GlState.RUNNING}
-    except {
+    handle {
         errors.add(
             GlError(
                 code = "stub",

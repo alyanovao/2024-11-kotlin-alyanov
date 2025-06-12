@@ -7,6 +7,7 @@ import ru.aao.geolocation.lib.cor.ICorExecDsl
 
 class CorChain<T> (
     private val execs: List<ICorExec<T>>,
+    title: String = "",
     description: String = "",
     active: suspend T.() -> Boolean = { true },
     except: suspend T.(Throwable) -> Unit = {}
@@ -25,6 +26,7 @@ class CorChainDsl<T>(): CorExecDsl<T>(), ICorChainDsl<T> {
     }
 
     override fun build(): ICorExec<T> = CorChain(
+        title = title,
         description = description,
         execs = workers.map { it.build() },
         active = active,

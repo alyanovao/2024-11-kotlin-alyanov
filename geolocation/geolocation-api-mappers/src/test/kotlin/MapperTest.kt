@@ -2,6 +2,7 @@ import ru.aao.geolocation.api.v1.models.*
 import ru.aao.geolocation.common.GeolocationContext
 import ru.aao.geolocation.common.models.*
 import ru.aao.geolocation.common.stubs.GlStubs
+import ru.aao.geolocation.lib.logging.LogLevel
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -28,8 +29,8 @@ class MapperTest {
 
         assertEquals(GlStubs.SUCCESS, context.stubCase)
         assertEquals(GlWorkMode.STUB, context.workMode)
-        assertEquals(DeviceId(1), context.location.deviceId)
         assertEquals(PersonId(1), context.location.personId)
+        assertEquals(DeviceId(1), context.location.deviceId)
         assertEquals(Latitude(45.05), context.location.latitude)
         assertEquals(Longitude(39.0), context.location.longitude)
         assertEquals(Bearing(0.0), context.location.bearing)
@@ -56,6 +57,7 @@ class MapperTest {
                 code = "1",
                 group = "Test",
                 field = "comment",
+                level = LogLevel.ERROR,
                 message = "Not null message"
             )
             ),

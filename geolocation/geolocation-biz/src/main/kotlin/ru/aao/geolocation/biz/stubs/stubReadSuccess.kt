@@ -13,7 +13,7 @@ fun ICorChainDsl<GeolocationContext>.stubReadSuccess(description: String, corSet
     active { stubCase == GlStubs.SUCCESS && state == GlState.RUNNING}
     //val log = corSettings.logProvider.logger(this::class)
     //val logger = corSetting.logProvider.logger("stubReadSuccess")
-    except {
+    handle {
         state = GlState.FINISHED
         val stub = GeolocationStub.prepareResult {
             location.personId.takeIf { it != PersonId.NONE }?.also { this.personId = it }

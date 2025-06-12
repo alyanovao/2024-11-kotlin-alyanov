@@ -1,6 +1,7 @@
 package ru.aao.geolocation.common.models
 
 data class BaseGeolocation(
+    var id: GeolocationId = GeolocationId.NONE,
     var personId: PersonId = PersonId.NONE,
     var deviceId: DeviceId = DeviceId.NONE,
     var longitude: Longitude = Longitude.NONE,
@@ -12,6 +13,9 @@ data class BaseGeolocation(
     var lock: GlLock = GlLock.NONE,
     var permissionClient: MutableSet<GlPermissionClient> = mutableSetOf()
 ) {
+    fun deepCopy(): BaseGeolocation = copy(
+        permissionClient = permissionClient.toMutableSet()
+    )
     fun isEmpty() = this == NONE
 
     companion object {

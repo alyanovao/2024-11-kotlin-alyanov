@@ -1,7 +1,8 @@
-import ru.aao.geolocation.common.exceptions.RequestUnknownException
 import ru.aao.geolocation.api.v1.models.*
 import ru.aao.geolocation.common.GeolocationContext
+import ru.aao.geolocation.common.exceptions.RequestUnknownException
 import ru.aao.geolocation.common.models.*
+import ru.aao.geolocation.common.models.BaseGeolocation
 import ru.aao.geolocation.common.stubs.GlStubs
 
 fun GeolocationContext.fromTransport(request: IRequest) = when (request) {
@@ -15,35 +16,35 @@ fun GeolocationContext.fromTransport(request: IRequest) = when (request) {
 
 fun GeolocationContext.fromTransport(request: ICreateLocationRequest) {
     command = GlCommand.CREATE
-    location = request.gl?.toInternal() ?: ru.aao.geolocation.common.models.BaseGeolocation()
+    this.location = request.gl?.toInternal() ?: BaseGeolocation()
     workMode = request.mode.transportToWorkMode()
     stubCase = request.mode.transportToStubCase()
 }
 
 fun GeolocationContext.fromTransport(request: IReadCurrentLocationRequest) {
     command = GlCommand.READ_CURRENT
-    location = request.device.toInternal()
+    this.location = request.gl.toInternal()
     workMode = request.mode.transportToWorkMode()
     stubCase = request.mode.transportToStubCase()
 }
 
 fun GeolocationContext.fromTransport(request: IReadAllLocationRequest) {
     command = GlCommand.READ_ALL
-    location = request.device.toInternal()
+    this.location = request.gl.toInternal()
     workMode = request.mode.transportToWorkMode()
     stubCase = request.mode.transportToStubCase()
 }
 
 fun GeolocationContext.fromTransport(request: IUpdateLocationRequest) {
     command = GlCommand.UPDATE
-    location = request.device?.toInternal() ?: ru.aao.geolocation.common.models.BaseGeolocation()
+    this.location = request.gl.toInternal()
     workMode = request.mode.transportToWorkMode()
     stubCase = request.mode.transportToStubCase()
 }
 
 fun GeolocationContext.fromTransport(request: IDeleteLocationRequest) {
     command = GlCommand.DELETE
-    location = request.device.toInternal()
+    this.location = request.gl.toInternal()
     workMode = request.mode.transportToWorkMode()
     stubCase = request.mode.transportToStubCase()
 }
@@ -65,10 +66,11 @@ private fun WorkMode?.transportToWorkMode(): GlWorkMode = when(this?.mode) {
     null -> GlWorkMode.PROD
 }
 
-private fun CreateObject.toInternal(): ru.aao.geolocation.common.models.BaseGeolocation =
-    ru.aao.geolocation.common.models.BaseGeolocation(
-        deviceId = this.deviceId.toDeviceIdId(),
+private fun CreateObject.toInternal(): BaseGeolocation =
+    BaseGeolocation(
+        id = this.id.toId(),
         personId = this.personId.toPersonId(),
+        deviceId = this.deviceId.toDeviceId(),
         longitude = this.longitude.toLongitude(),
         latitude = this.latitude.toLatitude(),
         bearing = this.bearing.toBearing(),
@@ -77,42 +79,49 @@ private fun CreateObject.toInternal(): ru.aao.geolocation.common.models.BaseGeol
         batteryLevel = this.batteryLevel.toBatteryLevel()
     )
 
-private fun ReadObject?.toInternal(): ru.aao.geolocation.common.models.BaseGeolocation = if (this != null) {
-    ru.aao.geolocation.common.models.BaseGeolocation(deviceId = deviceId.toDeviceIdId())
+private fun ReadObject?.toInternal(): BaseGeolocation = if (this != null) {
+    BaseGeolocation(
+        id = id.toId(),
+        personId = personId.toPersonId(),
+        deviceId = deviceId.toDeviceId()
+    )
 } else {
-    ru.aao.geolocation.common.models.BaseGeolocation()
+    BaseGeolocation()
 }
 
-private fun ReadAllObject?.toInternal(): ru.aao.geolocation.common.models.BaseGeolocation = if (this != null) {
-    ru.aao.geolocation.common.models.BaseGeolocation(deviceId = deviceId.toDeviceIdId())
+private fun ReadAllObject?.toInternal(): BaseGeolocation = if (this != null) {
+    BaseGeolocation(
+        id = id.toId(),
+        personId = personId.toPersonId(),
+        deviceId = deviceId.toDeviceId()
+    )
 } else {
-    ru.aao.geolocation.common.models.BaseGeolocation()
+    BaseGeolocation()
 }
 
-private fun UpdateObject?.toInternal(): ru.aao.geolocation.common.models.BaseGeolocation =
-    ru.aao.geolocation.common.models.BaseGeolocation(
-        deviceId = DeviceId.NONE,
-        personId = PersonId.NONE,
-        longitude = Longitude.NONE,
-        latitude = Latitude.NONE,
-        bearing = Bearing.NONE,
-        altitude = Altitude.NONE,
-        batteryLevel = BatteryLevel.NONE
+private fun UpdateObject?.toInternal(): BaseGeolocation =
+    BaseGeolocation(
+        id = this?.id.toId(),
+        personId = this?.personId.toPersonId(),
+        deviceId = this?.deviceId.toDeviceId(),
+        longitude = this?.longitude.toLongitude(),
+        latitude = this?.latitude.toLatitude(),
+        bearing = this?.bearing.toBearing(),
+        altitude = this?.altitude.toAltitude(),
+        eventDateTime = this?.eventDateTime.toEventDateTime(),
+        batteryLevel = this?.batteryLevel.toBatteryLevel()
     )
 
-private fun DeleteObject?.toInternal(): ru.aao.geolocation.common.models.BaseGeolocation =
-    ru.aao.geolocation.common.models.BaseGeolocation(
-        deviceId = DeviceId.NONE,
-        personId = PersonId.NONE,
-        longitude = Longitude.NONE,
-        latitude = Latitude.NONE,
-        bearing = Bearing.NONE,
-        altitude = Altitude.NONE,
-        batteryLevel = BatteryLevel.NONE
+private fun DeleteObject?.toInternal(): BaseGeolocation =
+    BaseGeolocation(
+        id = this?.id.toId(),
+        personId = this?.personId.toPersonId(),
+        deviceId = this?.deviceId.toDeviceId()
     )
 
-private fun Long?.toDeviceIdId() = this?.let { DeviceId(it) } ?: DeviceId.NONE
+private fun Long?.toId() = this?.let { GeolocationId(it) } ?: GeolocationId.NONE
 private fun Long?.toPersonId() = this?.let { PersonId(it) } ?: PersonId.NONE
+private fun Long?.toDeviceId() = this?.let { DeviceId(it) } ?: DeviceId.NONE
 private fun Double?.toLatitude() = this?.let { Latitude(it) } ?: Latitude.NONE
 private fun Double?.toLongitude() = this?.let { Longitude(it) } ?: Longitude.NONE
 private fun Double?.toBearing() = this?.let { Bearing(it) } ?: Bearing.NONE

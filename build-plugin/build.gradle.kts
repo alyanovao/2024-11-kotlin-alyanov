@@ -6,11 +6,15 @@ gradlePlugin {
     plugins {
         register("build-jvm") {
             id = "build-jvm"
-            implementationClass = "ru.otus.otuskotlin.marketplace.plugin.BuildPluginJvm"
+            implementationClass = "ru.aao.geolocation.plugin.BuildPluginJvm"
         }
         register("build-kmp") {
             id = "build-kmp"
-            implementationClass = "ru.otus.otuskotlin.marketplace.plugin.BuildPluginMultiplatform"
+            implementationClass = "ru.aao.geolocation.plugin.BuildPluginMultiplatform"
+        }
+        register("build-pgContainer") {
+            id = "build-pgContainer"
+            implementationClass = ""
         }
     }
 }
@@ -25,4 +29,8 @@ dependencies {
 
     implementation(libs.plugin.kotlin)
     implementation(libs.plugin.binaryCompatibilityValidator)
+
+    implementation(libs.testcontainers.core)
+    implementation(libs.testcontainers.postgres)
+    implementation(libs.db.postgres)
 }

@@ -5,8 +5,13 @@ import ru.aao.geolocation.common.models.GlState
 import ru.aao.geolocation.lib.cor.ICorChainDsl
 import ru.aao.geolocation.lib.cor.worker
 
-fun ICorChainDsl<GeolocationContext>.initStatus(description: String) = worker() {
-    this.description = description
-    active { state == GlState.NONE }
-    except { state == GlState.RUNNING }
+fun ICorChainDsl<GeolocationContext>.initStatus(title: String) = worker() {
+    this.title = title
+    this.description = "Инициализация статуса"
+    active {
+        state == GlState.NONE
+    }
+    handle {
+        state = GlState.RUNNING
+    }
 }
