@@ -9,7 +9,7 @@ import ru.aao.geolocation.lib.cor.worker
 fun ICorChainDsl<GeolocationContext>.stubNoCase(description: String) = worker {
     this.description = description
     active {state == GlState.RUNNING}
-    except {
+    handle {
         errors.add(
             GlError(
                 code = "validation",

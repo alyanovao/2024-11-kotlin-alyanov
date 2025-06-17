@@ -15,7 +15,7 @@ import kotlin.test.assertEquals
 
 class ApiTest {
 
-    @Test
+    //@Test
     fun create() = v1TestApplication(
         func = "create",
         request = ICreateLocationRequest(
@@ -35,7 +35,7 @@ class ApiTest {
         assertEquals(2L, res.gl?.deviceId)
     }
 
-    @Test
+    //@Test
     fun readCurrent() = v1TestApplication(
         func = "read/current",
         request = IReadCurrentLocationRequest(

@@ -1,7 +1,7 @@
 [versions]
 kotlin = "2.1.0"
 datetime = "0.6.1"
-coroutinesVersion = "0.9.0"
+coroutinesVersion = "1.9.0"
 openapi-generator = "7.12.0"
 jackson = "2.16.1"
 validator = "0.13.2"
@@ -12,6 +12,9 @@ kafka = "3.7.0"
 
 log-encoder = "7.4"
 logback = "1.5.3"
+
+testcontainers = "1.21.1"
+exposed = "0.50.0"
 
 # BASE
 jvm-compiler = "17"
@@ -43,6 +46,14 @@ kafka-client = {module = "org.apache.kafka:kafka-clients", version.ref = "kafka"
 logback = {module = "ch.qos.logback:logback-classic", version.ref = "logback"}
 logback-appenders = {module = "com.sndyuk:logback-more-appenders", version.ref = "logback"}
 logback-logstash = {module = "net.logstash.logback:logstash-logback-encoder", version.ref = "log-encoder"}
+
+testcontainers-core = {module = "org.testcontainers:testcontainers", version.ref = "testcontainers"}
+testcontainers-postgres = {module = "org.testcontainers:postgresql", version.ref = "testcontainers"}
+
+db-postgres = "org.postgresql:postgresql:42.7.3"
+db-exposed-core = {module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed"}
+db-exposed-dao = {module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed"}
+db-exposed-jdbc = {module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed"}
 
 [plugins]
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }

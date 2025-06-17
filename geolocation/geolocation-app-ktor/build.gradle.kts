@@ -48,4 +48,9 @@ dependencies {
     implementation(kotlin("test-common"))
     implementation(kotlin("test-annotations-common"))
     implementation(libs.ktor.server.test)
+    implementation(project(":geolocation-stub"))
+    implementation(project(":geolocation-repository-common"))
+    implementation(project(":geolocation-repository-inmemory"))
+    implementation(project(":geolocation-repository-postgres"))
+    implementation(project(":geolocation-repository-stubs"))
 }

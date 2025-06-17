@@ -6,6 +6,7 @@ import ru.aao.geolocation.common.models.GlWorkMode
 import ru.aao.geolocation.lib.cor.ICorChainDsl
 import ru.aao.geolocation.lib.cor.chain
 
+/*
 fun ICorChainDsl<GeolocationContext>.stubs(description: String,
                                            block: ICorChainDsl<GeolocationContext>.() -> Unit
 ) = chain {
@@ -13,3 +14,4 @@ fun ICorChainDsl<GeolocationContext>.stubs(description: String,
     this.description = description
     active { this.workMode == GlWorkMode.STUB && this.state == GlState.RUNNING }
 }
+*/

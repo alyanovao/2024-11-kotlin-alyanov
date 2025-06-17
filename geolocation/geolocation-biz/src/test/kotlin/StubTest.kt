@@ -6,7 +6,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class StubTest {
-    val processor: GlProcessor = GlProcessor()
+    private val processor: GlProcessor = GlProcessor()
 
     @Test
     fun create(): Unit = runTest {
@@ -14,8 +14,8 @@ class StubTest {
             requestId = GlRequestId(1),
             command = GlCommand.CREATE,
             glResponse = BaseGeolocation(
-                deviceId = DeviceId(1),
                 personId = PersonId(1),
+                deviceId = DeviceId(1),
                 latitude = Latitude(45.05),
                 longitude = Longitude(39.0),
                 bearing = Bearing(1.0),
@@ -33,8 +33,8 @@ class StubTest {
             state = GlState.RUNNING
         )
         processor.exec(ctx)
-        assertEquals(DeviceId(1), ctx.glResponse.deviceId)
         assertEquals(PersonId(1), ctx.glResponse.personId)
+        assertEquals(DeviceId(1), ctx.glResponse.deviceId)
         assertEquals(Latitude(45.05), ctx.glResponse.latitude)
         assertEquals(Longitude(39.0), ctx.glResponse.longitude)
         assertEquals(Bearing(1.0), ctx.glResponse.bearing)
@@ -48,8 +48,8 @@ class StubTest {
             requestId = GlRequestId(1),
             command = GlCommand.READ_CURRENT,
             glResponse = BaseGeolocation(
-                deviceId = DeviceId(1),
                 personId = PersonId(1),
+                deviceId = DeviceId(1),
                 latitude = Latitude(45.05),
                 longitude = Longitude(39.0),
                 bearing = Bearing(1.0),
@@ -67,8 +67,8 @@ class StubTest {
             state = GlState.RUNNING
         )
         processor.exec(ctx)
-        assertEquals(DeviceId(1), ctx.glResponse.deviceId)
         assertEquals(PersonId(1), ctx.glResponse.personId)
+        assertEquals(DeviceId(1), ctx.glResponse.deviceId)
         assertEquals(Latitude(45.05), ctx.glResponse.latitude)
         assertEquals(Longitude(39.0), ctx.glResponse.longitude)
         assertEquals(Bearing(1.0), ctx.glResponse.bearing)
@@ -82,8 +82,8 @@ class StubTest {
             requestId = GlRequestId(1),
             command = GlCommand.READ_ALL,
             glResponse = BaseGeolocation(
-                deviceId = DeviceId(1),
                 personId = PersonId(1),
+                deviceId = DeviceId(1),
                 latitude = Latitude(45.05),
                 longitude = Longitude(39.0),
                 bearing = Bearing(1.0),

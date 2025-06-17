@@ -10,7 +10,7 @@ import ru.aao.geolocation.lib.cor.worker
 fun ICorChainDsl<GeolocationContext>.stubValidateBadDescription(description: String, corSetting: GlSettings) = worker {
     this.description = description
     active { stubCase == GlStubs.BAD_PERSON_ID && state == GlState.RUNNING}
-    except {
+    handle {
         errors.add(
             GlError(
                 code = "validation",
